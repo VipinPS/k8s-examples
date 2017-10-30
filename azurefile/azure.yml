@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: azure
+spec:
+ containers:
+  - image: jenkins/jenkins
+    name: azure
+    volumeMounts:
+      - name: azure
+        mountPath: /var/jenkins_home
+ volumes:
+      - name: azure
+        azureFile:
+          secretName: azure-secret
+          shareName: rangefiles
+          readOnly: false

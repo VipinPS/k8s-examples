@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  template:
+    metadata:
+      labels:
+        name: jenkins
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: azure
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: azure
+          azureFile:
+            secretName: jenkins
+            shareName: bigshares
+            readOnly: false

@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins-master
+spec:
+  template:
+    metadata:
+      labels:
+        name: jenkins-master
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: jenkins-master
+          image: jenkins
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: jenkins-master-vol
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-master-vol
+          persistentVolumeClaim:
+            claimName: myclaim

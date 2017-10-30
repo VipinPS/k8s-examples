@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: jenkins
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+         - name: azure
+           mountPath: /var/jenkins_home
+      volumes:
+        - name: azure
+          azureFile:
+            secretName: jenkins
+            shareName: bigshares
+            readOnly: false  
