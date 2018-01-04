@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    service.type: LoadBalancer
+  creationTimestamp: null
+  name: jenkins
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        service: jenkins
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - image: jenkinsci/jenkins:lts
+        name: jenkins
+        ports:
+        - containerPort: 8080
+        - containerPort: 8443
+        - containerPort: 50000
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-data
+      restartPolicy: Always
+      volumes:
+      - name: jenkins-data
+        persistentVolumeClaim:
+          claimName: dd-managed-hdd-15g

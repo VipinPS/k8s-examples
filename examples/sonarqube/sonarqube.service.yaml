@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+  labels:
+    name: sonar
+  name: sonar
+spec:
+  type: LoadBalancer
+  ports:
+    - name: "sonarport"
+      port: 80
+      targetPort: 9000
+  selector:
+    name: sonar

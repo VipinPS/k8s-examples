@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sonar
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: sonar
+      labels:
+        name: sonar
+    spec:
+      containers:
+        - image: sonarqube
+          args:
+            - -Dsonar.web.context=/sonar
+          name: sonar
+          env:
+            - name: SONARQUBE_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgsql
+                  key: password
+            - name: SONARQUBE_JDBC_URL
+              value: jdbc:postgresql://10.233.64.4:5432/sonar
+          ports:
+            - containerPort: 9000
+              name: sonar
